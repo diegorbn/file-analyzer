@@ -31,6 +31,7 @@ typedef struct {
 } LogReport;
 
 /* Read exactly count decimal digits and advance the cursor on success. */
+/* Lee la cantidad pedida de dígitos y avanza si todo sale bien. */
 static int digits(const char **cursor, size_t count, int *value)
 {
     int result = 0;
@@ -47,6 +48,7 @@ static int digits(const char **cursor, size_t count, int *value)
 }
 
 /* Parse a yearless syslog timestamp; its sortable key assumes one calendar year. */
+/* Lee la fecha de syslog y arma una clave para ordenarla. */
 static int timestamp(const char **cursor, int *key, char display[16])
 {
     static const char *months[] = {
@@ -95,6 +97,7 @@ static int timestamp(const char **cursor, int *key, char display[16])
 }
 
 /* Extract a syslog source and message from a complete, mutable input line. */
+/* Saca el programa y el mensaje de una línea syslog. */
 static int parse_entry(char *line, int *key, char display[16],
                        char **source, char **message)
 {
@@ -144,6 +147,7 @@ static int parse_entry(char *line, int *key, char display[16],
 }
 
 /* Count a source, growing the array only when a new name appears. */
+/* Suma una aparición del servicio y lo agrega si es nuevo. */
 static int count_service(LogReport *report, const char *name)
 {
     for (size_t index = 0; index < report->service_count; index++) {
@@ -175,6 +179,7 @@ static int count_service(LogReport *report, const char *name)
 }
 
 /* Return a severity rank for a whole ASCII word. */
+/* Da un nivel de gravedad a una palabra reconocida. */
 static int severity_word(const char *word, size_t length)
 {
     char token[16];
@@ -199,6 +204,7 @@ static int severity_word(const char *word, size_t length)
 }
 
 /* Find the strongest recognized severity in a message, ignoring case. */
+/* Busca el nivel de gravedad más alto dentro del mensaje. */
 static int message_severity(const char *message)
 {
     int strongest = 0;
@@ -221,6 +227,8 @@ static int message_severity(const char *message)
     return strongest;
 }
 
+/* Sort services by frequency, then by name. */
+/* Ordena los servicios por cantidad y después por nombre. */
 static int service_order(const void *left, const void *right)
 {
     const ServiceCount *a = left;
@@ -231,6 +239,8 @@ static int service_order(const void *left, const void *right)
     return strcmp(a->name, b->name);
 }
 
+/* Print the log summary and its most frequent services. */
+/* Muestra el resumen del log y sus servicios más frecuentes. */
 static void print_report(FILE *output, LogReport *report)
 {
     fprintf(output, "Líneas totales: %zu\nLíneas vacías: %zu\n",
@@ -260,21 +270,29 @@ static void print_report(FILE *output, LogReport *report)
             report->unmatched_lines);
 }
 
+/* Return the plugin's display name. */
+/* Da el nombre que se ve en el menú. */
 const char *plugin_name(void)
 {
     return "Analizador de registros";
 }
 
+/* Return the file extension handled by this plugin. */
+/* Dice que este plugin trabaja con archivos .log. */
 const char *plugin_extension(void)
 {
     return ".log";
 }
 
+/* Return a short description of the plugin. */
+/* Da una descripción corta de lo que analiza. */
 const char *info(void)
 {
     return "Resume registros syslog: severidad, fechas, servicios y líneas no reconocidas.";
 }
 
+/* Read a log file and print its summary. */
+/* Lee el log y muestra un resumen de sus entradas. */
 int analyze(const char *file_path, FILE *output)
 {
     if (!file_path || !output) {

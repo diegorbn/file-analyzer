@@ -36,6 +36,7 @@ static int use_color;
 static int interactive_terminal;
 
 /* Clear an interactive terminal without invoking an external command. */
+/* Limpia la pantalla si estamos en una terminal interactiva. */
 static void clear_screen(void)
 {
     if (interactive_terminal) {
@@ -45,6 +46,7 @@ static void clear_screen(void)
 }
 
 /* Return true for a shared-library filename. */
+/* Revisa si el nombre termina en .so. */
 static int is_shared_library(const char *name)
 {
     size_t length = strlen(name);
@@ -52,6 +54,7 @@ static int is_shared_library(const char *name)
 }
 
 /* Find an already loaded library by its path. */
+/* Busca si esa ruta ya está cargada. */
 static int has_path(const PluginRegistry *registry, const char *path)
 {
     for (size_t index = 0; index < registry->count; index++) {
@@ -63,6 +66,7 @@ static int has_path(const PluginRegistry *registry, const char *path)
 }
 
 /* Find the first plugin supporting an extension. */
+/* Busca el primer plugin que acepta esa extensión. */
 static Plugin *find_extension(PluginRegistry *registry, const char *extension)
 {
     for (size_t index = 0; index < registry->count; index++) {
@@ -74,6 +78,7 @@ static Plugin *find_extension(PluginRegistry *registry, const char *extension)
 }
 
 /* Load a library and retain its functions until program exit. */
+/* Carga un plugin y guarda sus funciones para usarlas después. */
 static int load_plugin(PluginRegistry *registry, char *path)
 {
     _Static_assert(sizeof(plugin_name_fn) == sizeof(void *),
@@ -137,6 +142,7 @@ static int load_plugin(PluginRegistry *registry, char *path)
 }
 
 /* Scan the directory for libraries that have not been loaded yet. */
+/* Revisa la carpeta y carga los plugins nuevos. */
 static int reload_plugins(PluginRegistry *registry)
 {
     struct dirent **entries = NULL;
@@ -164,7 +170,8 @@ static int reload_plugins(PluginRegistry *registry)
                     int result = load_plugin(registry, path);
                     if (result > 0) {
                         loaded++;
-                        path = NULL; /* The registry now owns this path. */
+                        path = NULL; /* The registry now owns this path.
+                                      * La ruta ya queda a cargo del registro. */
                     } else if (result < 0) {
                         failed = 1;
                     }
@@ -182,6 +189,7 @@ static int reload_plugins(PluginRegistry *registry)
 }
 
 /* Show the metadata exported by each loaded plugin. */
+/* Muestra los formatos y datos de cada plugin cargado. */
 static void list_plugins(const PluginRegistry *registry)
 {
     if (registry->count == 0) {
@@ -198,6 +206,7 @@ static void list_plugins(const PluginRegistry *registry)
 }
 
 /* Read one menu or path input line, removing its line ending. */
+/* Lee lo que escribe el usuario y quita el salto de línea. */
 static char *read_input(const char *prompt)
 {
     char *line = NULL;
@@ -213,6 +222,7 @@ static char *read_input(const char *prompt)
 }
 
 /* Select an analyzer from the final extension in the file's basename. */
+/* Elige el plugin según la extensión del archivo y lo ejecuta. */
 static void analyze_file(PluginRegistry *registry)
 {
     char *path = read_input("Ruta del archivo: ");
@@ -244,6 +254,7 @@ static void analyze_file(PluginRegistry *registry)
 }
 
 /* Release every loaded library after its metadata is no longer needed. */
+/* Cierra los plugins cargados y libera su memoria. */
 static void free_plugins(PluginRegistry *registry)
 {
     for (size_t index = 0; index < registry->count; index++) {
@@ -253,6 +264,8 @@ static void free_plugins(PluginRegistry *registry)
     free(registry->items);
 }
 
+/* Run the menu until the user exits. */
+/* Muestra el menú y atiende las opciones hasta salir. */
 int main(void)
 {
     PluginRegistry registry = {0};

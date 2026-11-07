@@ -16,6 +16,7 @@ typedef struct WordEntry {
 } WordEntry;
 
 /* Decode one UTF-8 character from text.
+ * Lee un carácter UTF-8 y dice cuántos bytes ocupa.
  * text: current byte position; remaining: bytes available from that position.
  * codepoint: receives the decoded value, or U+FFFD for an invalid byte.
  * Returns the number of bytes consumed (one for an invalid byte).
@@ -67,6 +68,7 @@ static size_t utf8_codepoint(const unsigned char *text, size_t remaining,
 }
 
 /* Check whether codepoint is whitespace for the blank-line calculation.
+ * Revisa si el carácter cuenta como espacio en una línea vacía.
  * codepoint: decoded Unicode value. Returns nonzero for whitespace.
  */
 static int is_space(uint32_t codepoint)
@@ -80,6 +82,7 @@ static int is_space(uint32_t codepoint)
 }
 
 /* Check whether codepoint can belong to a counted word.
+ * Revisa si el carácter puede formar parte de una palabra.
  * codepoint: decoded Unicode value. Returns nonzero for ASCII letters/digits
  * or Latin-1 letters, including Spanish accented letters.
  */
@@ -94,6 +97,7 @@ static int is_word_character(uint32_t codepoint)
 }
 
 /* Normalize a word character for case-insensitive frequency counting.
+ * Pasa el carácter a minúscula para contar palabras sin importar mayúsculas.
  * codepoint: ASCII or Latin-1 character. Returns its lowercase code point.
  */
 static uint32_t lowercase(uint32_t codepoint)
@@ -107,6 +111,7 @@ static uint32_t lowercase(uint32_t codepoint)
 }
 
 /* Write a normalized word character as UTF-8.
+ * Guarda el carácter normalizado en UTF-8.
  * codepoint: ASCII or Latin-1 character; destination: buffer with room for
  * two bytes. Returns the number of bytes written.
  */
@@ -122,6 +127,7 @@ static size_t encode_utf8(uint32_t codepoint, char *destination)
 }
 
 /* Choose the frequency-table bucket for a normalized word.
+ * Elige dónde guardar la palabra en la tabla de conteo.
  * word: null-terminated lowercase UTF-8 text. Returns a bucket index.
  */
 static size_t word_hash(const char *word)
@@ -134,6 +140,7 @@ static size_t word_hash(const char *word)
 }
 
 /* Increment a word's frequency, adding it to the table if needed.
+ * Suma una aparición de la palabra o la agrega si es nueva.
  * buckets: hash table of word entries; word: normalized, null-terminated text.
  * Returns zero on success or -1 if allocation fails.
  */
@@ -163,6 +170,7 @@ static int count_word(WordEntry **buckets, const char *word)
 }
 
 /* Release every word and entry stored in the frequency table.
+ * Libera las palabras guardadas en la tabla.
  * buckets: hash table whose entries are freed.
  */
 static void free_words(WordEntry **buckets)
@@ -179,6 +187,7 @@ static void free_words(WordEntry **buckets)
 }
 
 /* Compare two entries for the top-five ordering.
+ * Decide cuál palabra va primero en el ranking.
  * left, right: entries to compare. Returns nonzero when left has a higher
  * count, or wins an alphabetical tie.
  */
@@ -189,6 +198,7 @@ static int comes_before(const WordEntry *left, const WordEntry *right)
 }
 
 /* Print up to five most frequent words in Spanish.
+ * Muestra las cinco palabras más repetidas.
  * output: destination stream; buckets: populated word-frequency table.
  */
 static void print_top_words(FILE *output, WordEntry **buckets)
@@ -219,18 +229,21 @@ static void print_top_words(FILE *output, WordEntry **buckets)
 }
 
 /* Return this plugin's display name in Spanish. Takes no parameters. */
+/* Da el nombre que se ve en el menú. */
 const char *plugin_name(void)
 {
     return "Analizador de texto";
 }
 
 /* Return the supported file extension, including its dot. Takes no parameters. */
+/* Dice que este plugin trabaja con archivos .txt. */
 const char *plugin_extension(void)
 {
     return ".txt";
 }
 
 /* Return a Spanish description of this plugin. Takes no parameters. */
+/* Da una descripción corta de lo que analiza. */
 const char *info(void)
 {
     return "Cuenta líneas, palabras y caracteres; muestra la línea más larga "
@@ -238,6 +251,7 @@ const char *info(void)
 }
 
 /* Read a text file and print its line, word, and character statistics.
+ * Lee el texto y muestra datos sobre líneas, palabras y caracteres.
  * file_path: path to the input file; output: stream for Spanish results/errors.
  * Returns zero on success and nonzero for invalid input, I/O, or allocation
  * errors.

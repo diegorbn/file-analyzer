@@ -52,6 +52,8 @@ typedef enum {
     FIELD_CLOSED
 } FieldState;
 
+/* Append one character to the current CSV field. */
+/* Agrega un carácter al campo que se está leyendo. */
 static int append_character(Field *field, int character)
 {
     if (field->length == SIZE_MAX) {
@@ -73,6 +75,8 @@ static int append_character(Field *field, int character)
     return 0;
 }
 
+/* Save the current field as a cell in the row. */
+/* Guarda el campo actual como una celda de la fila. */
 static int finish_field(Field *field, Row *row)
 {
     if (row->count == row->capacity) {
@@ -100,6 +104,8 @@ static int finish_field(Field *field, Row *row)
     return 0;
 }
 
+/* Free the cells in a completed row. */
+/* Libera las celdas de la fila que ya se procesó. */
 static void clear_row(Row *row)
 {
     for (size_t index = 0; index < row->count; index++) {
@@ -108,6 +114,8 @@ static void clear_row(Row *row)
     row->count = 0;
 }
 
+/* Parse a finite number from a cell. */
+/* Revisa si una celda tiene un número válido. */
 static int parse_number(const char *text, double *value)
 {
     if (!*text) {
@@ -129,6 +137,8 @@ static int parse_number(const char *text, double *value)
     return 1;
 }
 
+/* Record a row with an unexpected column count. */
+/* Anota una fila que tiene otra cantidad de columnas. */
 static int add_mismatch(CsvReport *report, size_t columns)
 {
     if (report->mismatch_count == report->mismatch_capacity) {
@@ -150,6 +160,8 @@ static int add_mismatch(CsvReport *report, size_t columns)
     return 0;
 }
 
+/* Add a completed row to the report statistics. */
+/* Suma una fila al reporte y actualiza sus estadísticas. */
 static int finish_row(Row *row, CsvReport *report)
 {
     if (!report->headers) {
@@ -197,6 +209,8 @@ static int finish_row(Row *row, CsvReport *report)
     return 0;
 }
 
+/* Free the data stored in the CSV report. */
+/* Libera los datos guardados para el reporte. */
 static void free_report(CsvReport *report)
 {
     for (size_t index = 0; index < report->columns; index++) {
@@ -207,6 +221,8 @@ static void free_report(CsvReport *report)
     free(report->mismatches);
 }
 
+/* Print the CSV column and row statistics. */
+/* Muestra las estadísticas de filas y columnas del CSV. */
 static int print_report(FILE *output, const CsvReport *report)
 {
     fprintf(output, "Filas de datos: %zu\nColumnas: %zu\n",
@@ -240,16 +256,22 @@ static int print_report(FILE *output, const CsvReport *report)
     return ferror(output) ? 1 : 0;
 }
 
+/* Return the plugin's display name. */
+/* Da el nombre que se ve en el menú. */
 const char *plugin_name(void)
 {
     return "Analizador de CSV";
 }
 
+/* Return the file extension handled by this plugin. */
+/* Dice que este plugin trabaja con archivos .csv. */
 const char *plugin_extension(void)
 {
     return ".csv";
 }
 
+/* Return a short description of the plugin. */
+/* Da una descripción corta de lo que analiza. */
 const char *info(void)
 {
     return "Cuenta filas, columnas y celdas vacías; detecta filas irregulares "
@@ -257,6 +279,8 @@ const char *info(void)
            "saltos de línea dentro de ellos.";
 }
 
+/* Read a CSV file and print its report. */
+/* Lee el CSV y muestra un resumen de sus datos. */
 int analyze(const char *file_path, FILE *output)
 {
     if (!file_path || !output) {
