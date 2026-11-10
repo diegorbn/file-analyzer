@@ -1,0 +1,5 @@
+Hola, mundo. Este archivo muestra cómo funciona el analizador de texto.
+La información es útil para probar palabras, líneas y caracteres.
+
+Hola de nuevo: hola, HOLA y más texto.
+La línea final incluye números 2026 y palabras repetidas.

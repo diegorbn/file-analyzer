@@ -1,0 +1,12 @@
+Nov  6 08:15:00 demo-host systemd[1]: INFO: Sistema iniciado
+Nov  6 08:15:02 demo-host sshd[214]: Accepted publickey for ana
+Nov  6 08:16:10 demo-host kernel: warning: temperatura elevada
+Nov  6 08:17:30 demo-host nginx[410]: ERROR: conexión rechazada
+Nov  6 08:18:00 demo-host sshd[214]: Failed password for root
+
+Nov  6 08:20:00 demo-host nginx[410]: INFO: servicio disponible
+Nov  6 08:21:00 demo-host cron[502]: tarea ejecutada
+Nov  6 08:22:00 demo-host kernel: WARN: dispositivo lento
+Nov  6 08:23:00 demo-host systemd[1]: informational: servicio activo
+Nov  6 08:24:00 demo-host nginx[410]: ERROR: tiempo de espera agotado
+Esta línea no tiene formato syslog

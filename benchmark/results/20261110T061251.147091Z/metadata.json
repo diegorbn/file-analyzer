@@ -1,0 +1,60 @@
+{
+  "source_sha256": {
+    "common/registry.c": "ec5f970f359f502cb404e1b640794ca97a15e4a30a592e4aed9063adcf1fbaf8",
+    "src/main.c": "4ae5e45380a013fcf066a6e0f2f46eb43d8b9eebafd98a8d00830fdc8550b795",
+    "analyzers/txt_plugin.c": "4bc13f024f867bd3b702e61ebe1c00cbaf7f4064807f14b0e667589dda49b0fc",
+    "analyzers/csv_plugin.c": "607929db8b5ced13ebcc0f9494ede18f570bd9816a74d8ecd91b129a1d5b7838"
+  },
+  "executable_sha256": {
+    "static": "04fccccc0bcb4b72805aee3f2c14d12bd03bbaf90f5e36e07fa453c543db40c5",
+    "dynamic": "49414b551c6b53cf325257d1df86534360063344086bf604bba1fbb48e41b69f"
+  },
+  "plugin_sha256": {
+    "txt": "f5ce48e4281fa8e1851e49a45fa1ddb838a50a4b69e0d2b334a9a49019065790",
+    "csv": "4ef5f00e85eb8628da278df17a99ae098023d97c2a8a8c8f3df577df9658b9d9"
+  },
+  "version": "phase-benchmark-2-txt-csv",
+  "kernel": {
+    "system": "Linux",
+    "node": "katana",
+    "release": "6.6.87.2-microsoft-standard-WSL2",
+    "version": "#1 SMP PREEMPT_DYNAMIC Thu Jun  5 18:30:46 UTC 2025",
+    "machine": "x86_64",
+    "processor": "x86_64"
+  },
+  "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+  "git_revision": "090f5c2470bc75f785d14c149bb35b7752ad6d6b",
+  "flags": "-std=c11 -Wall -Wextra -Wpedantic -O0; analyzers -fPIC; shared objects -shared; dynamic frontend -DDYNAMIC -ldl",
+  "dataset": {
+    "count_per_format": 10,
+    "bytes_per_file": 524288,
+    "generator": "deterministic repeated lines, no random seed",
+    "sha256": {
+      "txt/00000.txt": "16906d0bd5cfe56605cb2dd78a34fc015deaea123ea12a9e54bea84061f9db4f",
+      "txt/00001.txt": "033d34f52a9eaf64c9f638e50f4a61925e52e17ae90817d8b82e1c08b9d96593",
+      "txt/00002.txt": "a30c8a5e66d2ee4c06b82e77d254c6ac799025f3820a46746f78067f7cce5e5b",
+      "txt/00003.txt": "ccd85acd1c7100f5dfd86b9c225f79012223cf98e6216ad5a7ea13ab18fbd586",
+      "txt/00004.txt": "173f2480d778125e064ae410894499db3f1f477d42c8e12022820a53d2a9d50b",
+      "txt/00005.txt": "428c1412b5f5fd060927db8f4383f57f5ff5878eb76ca942b0ba4a540cbb203f",
+      "txt/00006.txt": "53942a23cfa69a4cc2d89fac001c2295b4fb36ae29b5e7477a7af2136c8dd6a0",
+      "txt/00007.txt": "ebd183f90e1b3e093b9b26c9f4991f1a2c4ade3c70bf10da748cfff6a379eb8d",
+      "txt/00008.txt": "db9c238083f89c1d2622c62f5d66d125e1316d402b3f1cef3523cf3e690448bb",
+      "txt/00009.txt": "f2d31801b92548db83ee3b1b7d53a3129d65292e557f10c9c91392237a7e806f",
+      "csv/00000.csv": "88b73037d928f74eb4005040cdf46b352f8a26e0393080982cc3cd0a9cc575a6",
+      "csv/00001.csv": "9b8b761c083f3b7229ef9a599151684068e08187d93e2f8a97f95dc9fd9a9c51",
+      "csv/00002.csv": "27d43d7632dd3e9935c4bbd50c6529d0b025c3d683ceef2e2a2f69d36bed7cb4",
+      "csv/00003.csv": "3c574b0b9b08c241e299e461207a744d9c2a2ccf1961d41cb8931f0c39d63ec6",
+      "csv/00004.csv": "5b3a946f6ad0d51a8980b31688917960eaa40042772960870aa36c20a0524c50",
+      "csv/00005.csv": "9a9748aefe7802a9d398e8f485438091830a2b2ab953edafd657238cf36976f9",
+      "csv/00006.csv": "cd235de303417f3bf2f350e04ef728d4c8c9b0b2c7bd5ade4407f73669e73377",
+      "csv/00007.csv": "e8e540936578ca78d27da6237b9e211271515950dbaf51491f89046672da0268",
+      "csv/00008.csv": "4188b1d6e8c2c43312357218a1bcb447011b43624eeb7efe9c111c65370c0383",
+      "csv/00009.csv": "d3b365fa5c6349b2ba4e0f56651cc24795274f41a2f56b0b73822793fc5ff1bf"
+    }
+  },
+  "trials": 30,
+  "warmups": 5,
+  "order": "static batch then dynamic batch, warm-ups before measured trials per variant",
+  "plugins": "TXT and CSV installed before trials; acquired once at start of each phase",
+  "timers": "external CLOCK_MONOTONIC before fork through wait4; activation CLOCK_MONOTONIC around acquire; processing around each file-analysis loop; RSS wait4 ru_maxrss KiB"
+}
